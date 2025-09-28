@@ -70,7 +70,7 @@ Example visualizations and results are given in `demo.ipynb`.
 |--------|-------------|------|------|
 | **Gerchberg-Saxton (GS)** | Iterative phase retrieval algorithm | Well-established, popular method for CGH | Slower than neural network |
 | **Gradient Descent** | Direct optimization of phase patterns | Direct optimisation | Slow, can get stuck in local minima |
-| **Neural Network** | Learned mapping from target to phase | Very fast inference (~x10 facter than GS) | Less interpretable |
+| **Neural Network** | Learned mapping from target to phase | Very fast inference (~x10 faster than GS) | Less interpretable |
 
 ## Technical Details
 
