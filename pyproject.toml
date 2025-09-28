@@ -3,6 +3,7 @@ name = "qugao_ch"
 version = "0.1.0"
 description = "Computer Holography Semester Project"
 authors = ["Qu Gao <gaoqug@ethz.ch>", "Wojciech Adamczyk <wadamczyk@phys.ethz.ch>"]
+package-mode = false
 
 
 [tool.poetry.dependencies]
