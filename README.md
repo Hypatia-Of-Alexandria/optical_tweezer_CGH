@@ -146,4 +146,4 @@ nn_results = model(target_pattern)
 - [ ] Integration with physical SLM hardware
 
 ---
-*This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for improvement computer generated holography (CGH) for optical tweezers in trapped-ion quantum computing experiments. 
+*This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for computer generated holography (CGH) of optical tweezers in trapped-ion quantum computing experiments.*
