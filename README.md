@@ -3,7 +3,7 @@
 A comparison of three approaches for computer-generated holography: **Gerchberg-Saxton (GS)**, **Gradient Descent (SGD)**, and **Neural Network (VanillaNet)**.
 
 ## Overview
-This project implements and compares three different methods for generating holographic patterns for generating optical tweezer arrays (e.g. for trapped-ion quantum computing experiments). The methods are evaluated on synthetic datasets of discrete point patterns, and benchmarked against metrics including efficiency, uniformity, and computational performance.
+This project implements and compares three different methods for generating holographic patterns for generating optical tweezer arrays (e.g. for trapped-ion quantum computing experiments). The methods are evaluated on synthetic datasets of discrete point patterns, and benchmarked against metrics including power inefficiency, uniformity, and computational performance.
 
 ## Project Outline
 - **Three Holography Methods**: GS, SGD, and Neural Network approaches
