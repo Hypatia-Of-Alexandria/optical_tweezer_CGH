@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "qugao_ch"
+version = "0.1.0"
+description = "Computer Holography Semester Project"
+authors = ["Qu Gao <gaoqug@ethz.ch>", "Wojciech Adamczyk <wadamczyk@phys.ethz.ch>"]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+matplotlib = "^3.10.1"
+torch = "^2.6.0"
+opencv-python = "^4.11.0.86"
+ipykernel = "^6.29.5"
+tensorboard = "^2.19.0"
+torchsummary = "^1.5.1"
+tqdm = "^4.67.1"
+slmsuite = "^0.2.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+ipykernel = "^6.29.5"
+numpy = "^1.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | venv
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black" 
