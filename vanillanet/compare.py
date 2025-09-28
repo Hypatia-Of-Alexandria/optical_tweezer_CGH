@@ -41,10 +41,10 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
     # Ensure model and device are consistent
     model_device = next(model.parameters()).device
     if str(model_device) != str(device):
-        print(f"⚠️  Device mismatch detected!")
-        print(f"   Model is on: {model_device}")
-        print(f"   Requested device: {device}")
-        print(f"   Moving model to {device}...")
+        # print(f"⚠️  Device mismatch detected!")
+        # print(f"   Model is on: {model_device}")
+        # print(f"   Requested device: {device}")
+        # print(f"   Moving model to {device}...")
         model = model.to(device)
     
     print(f"Comparing all methods on {num_samples} samples...")
@@ -278,35 +278,34 @@ def print_comparison_summary(all_results):
     ]
     
     for method_name, results in zip(methods, method_results):
-        # All methods now have consistent metrics structure
         avg_ineff = np.mean([r['metrics']['inefficiency'] for r in results])
         avg_non_unif = np.mean([r['metrics']['non_uniformity'] for r in results])
         avg_intensity_err = np.mean([r['metrics']['intensity_error'] for r in results])
         avg_time = np.mean([r['metrics']['reconstruction_time'] for r in results])
         
         print(f"\n{method_name} (Average over {num_samples} samples):")
-        print(f"  Inefficiency:    {avg_ineff:.4f}")
-        print(f"  Non-uniformity:  {avg_non_unif:.4f}")
-        print(f"  Intensity error: {avg_intensity_err:.4f}")
-        print(f"  Reconstruction time: {avg_time:.4f} seconds")
+        print(f"  Inefficiency:    {avg_ineff:.8f}")
+        print(f"  Non-uniformity:  {avg_non_unif:.8f}")
+        print(f"  Intensity error: {avg_intensity_err:.8f}")
+        print(f"  Reconstruction time: {avg_time:.8f} seconds")
     
-    # Detailed per-sample comparison
-    print(f"\n{'='*80}")
-    print("DETAILED PER-SAMPLE COMPARISON")
-    print(f"{'='*80}")
-    print(f"{'Sample':<8} {'Method':<10} {'Points':<6} {'Ineff':<8} {'Non-unif':<8} {'Intensity err':<12} {'Time (s)':<8}")
-    print("-" * 70)
+    # # Detailed per-sample comparison
+    # print(f"\n{'='*80}")
+    # print("DETAILED PER-SAMPLE COMPARISON")
+    # print(f"{'='*80}")
+    # print(f"{'Sample':<8} {'Method':<10} {'Points':<6} {'Ineff':<8} {'Non-unif':<8} {'Intensity err':<12} {'Time (s)':<8}")
+    # print("-" * 70)
     
-    for i in range(num_samples):
-        idx = all_results['indices'][i]
+    # for i in range(num_samples):
+    #     idx = all_results['indices'][i]
 
-        # Get target from GS results (all methods use same target)
-        target = all_results['gs_standard_results'][i]['target_image']
-        if hasattr(target, 'cpu'):
-            target = target.squeeze().cpu().numpy()
-        n_points = int(np.sum(target > 0))
+    #     # Get target from GS results (all methods use same target)
+    #     target = all_results['gs_standard_results'][i]['target_image']
+    #     if hasattr(target, 'cpu'):
+    #         target = target.squeeze().cpu().numpy()
+    #     n_points = int(np.sum(target > 0))
         
-        for method_name, results in zip(methods, method_results):
-            metrics = results[i]['metrics']
-            print(f"Sample {i+1:<2} {method_name:<8} {n_points:<6} {metrics['inefficiency']:<8.3f} "
-                  f"{metrics['non_uniformity']:<8.3f} {metrics['intensity_error']:<8.3f} {metrics['reconstruction_time']:<8.4f}")
+    #     for method_name, results in zip(methods, method_results):
+    #         metrics = results[i]['metrics']
+    #         print(f"Sample {i+1:<2} {method_name:<8} {n_points:<6} {metrics['inefficiency']:<8.3f} "
+    #               f"{metrics['non_uniformity']:<8.3f} {metrics['intensity_error']:<8.3f} {metrics['reconstruction_time']:<8.4f}")

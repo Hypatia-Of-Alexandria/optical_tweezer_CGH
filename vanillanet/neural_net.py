@@ -213,7 +213,7 @@ def train_model(
             best_val_loss = val_loss
             patience_counter = 0
             # Save best model
-            torch.save(model.state_dict(), 'best_model.pth')
+            torch.save(model.state_dict(), 'models/best_model.pth')
             print(f"  -> New best validation loss: {best_val_loss:.4f}")
         else:
             patience_counter += 1
@@ -230,7 +230,7 @@ def train_model(
     print(f"Best validation loss: {best_val_loss:.4f}")
     
     # Load best model
-    model.load_state_dict(torch.load('best_model.pth', map_location=device))
+    model.load_state_dict(torch.load('models/best_model.pth', map_location=device))
     
     return model, device, dataset, train_losses, val_losses
 

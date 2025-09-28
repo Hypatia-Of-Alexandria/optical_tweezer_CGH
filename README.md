@@ -135,8 +135,8 @@ nn_results = model(target_pattern)
 - NumPy, Matplotlib
 
 ## Authors
-- **Qu Gao** - *Initial work* - [gaoqug@ethz.ch](mailto:gaoqug@ethz.ch)
-- **Wojciech Adamczyk** - *Supervisor* - [wadamczyk@phys.ethz.ch](mailto:wadamczyk@phys.ethz.ch)
+- **Qu Gao** 
+- **Wojciech Adamczyk** (supervisor for project)
 
 ## Future Work
 - [ ] Implement more sophisticated neural network architectures
@@ -144,4 +144,4 @@ nn_results = model(target_pattern)
 - [ ] Integration with physical SLM hardware
 
 ---
-*This project was developed as part of my semester project at ETH Zurich, focusing on the application of machine learning to computer-generated holography.*
+*This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for improvement computer generated holography (CGH) for optical tweezers in trapped-ion quantum computing experiments. 

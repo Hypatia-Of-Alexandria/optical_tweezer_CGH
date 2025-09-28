@@ -16,14 +16,8 @@ class VanillaModel(nn.Module):
 
     def forward(self, x):
         x = x.reshape(x.size(0), -1) # (batch_size, size, size) --> (batch_size, size * size)
-
-        # Apply ReLU activation after the first fully connected layer
         x = F.relu(self.fc1(x)) 
-
-        # Apply ReLU activation after the second fully connected layer  
         x = F.relu(self.fc2(x)) 
-
-        # Output from the final fully connected layer
         x = self.out(x) 
 
         # Reshape the output to (batch_size, max_points, 2)
