@@ -59,14 +59,16 @@ python train_vanillanet.py --num_samples 5000 --size 64 --min_points 5 --max_poi
 ```bash
 python compare_three_way.py --ckpt best_model.pth --size 64 --min_points 5 --max_points 15 --num_samples 5 --h1 256 --h2 512
 ```
-
 This generates `comparison_results.png` showing the performance of all three methods.
+
+### 3. Use `demo.ipynb`
+Example visualizations and results are given in `demo.ipynb`.
 
 ## Comparison between methods
 
 | Method | Description | Pros | Cons |
 |--------|-------------|------|------|
-| **Gerchberg-Saxton (GS) ** | Iterative phase retrieval algorithm | Well-established, popular | Slower than neural network |
+| **Gerchberg-Saxton (GS)** | Iterative phase retrieval algorithm | Well-established, popular method for CGH | Slower than neural network |
 | **Gradient Descent** | Direct optimization of phase patterns | Direct optimisation | Slow, can get stuck in local minima |
 | **Neural Network** | Learned mapping from target to phase | Very fast inference (~x10 facter than GS) | Less interpretable |
 
