@@ -3,7 +3,7 @@
 A comparison of three approaches for computer-generated holography: **Gerchberg-Saxton (GS)**, **Gradient Descent (SGD)**, and **Neural Network (VanillaNet)**.
 
 ## Overview
-This project implements and compares three different methods for generating holographic patterns for generating optical tweezer arrays (e.g. for trapped-ion quantum computing experiments). The methods are evaluated on synthetic datasets of discrete point patterns, and benchmarked against metrics including efficiency, uniformity, and computational performance.
+This project implements and compares three different methods for generating holographic patterns for generating optical tweezer arrays (e.g. for trapped-ion quantum computing experiments). The methods are evaluated on synthetic datasets of discrete point patterns, and benchmarked against metrics including power inefficiency, uniformity, and computational performance.
 
 ## Project Outline
 - **Three Holography Methods**: GS, SGD, and Neural Network approaches
@@ -59,16 +59,18 @@ python train_vanillanet.py --num_samples 5000 --size 64 --min_points 5 --max_poi
 ```bash
 python compare_three_way.py --ckpt best_model.pth --size 64 --min_points 5 --max_points 15 --num_samples 5 --h1 256 --h2 512
 ```
-
 This generates `comparison_results.png` showing the performance of all three methods.
+
+### 3. Use `demo.ipynb`
+Example visualizations and results are given in `demo.ipynb`.
 
 ## Comparison between methods
 
 | Method | Description | Pros | Cons |
 |--------|-------------|------|------|
-| **Gerchberg-Saxton (GS) ** | Iterative phase retrieval algorithm | Well-established, popular | Slower than neural network |
+| **Gerchberg-Saxton (GS)** | Iterative phase retrieval algorithm | Well-established, popular method for CGH | Slower than neural network |
 | **Gradient Descent** | Direct optimization of phase patterns | Direct optimisation | Slow, can get stuck in local minima |
-| **Neural Network** | Learned mapping from target to phase | Very fast inference (~x10 facter than GS) | Less interpretable |
+| **Neural Network** | Learned mapping from target to phase | Very fast inference (~x10 faster than GS) | Less interpretable |
 
 ## Technical Details
 
@@ -144,4 +146,4 @@ nn_results = model(target_pattern)
 - [ ] Integration with physical SLM hardware
 
 ---
-*This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for improvement computer generated holography (CGH) for optical tweezers in trapped-ion quantum computing experiments. 
+*This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for computer generated holography (CGH) of optical tweezers in trapped-ion quantum computing experiments.*
