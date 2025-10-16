@@ -115,18 +115,15 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
         # Time the neural network inference and reconstruction
         start_time = perf_counter()
         with torch.no_grad():
-            # ENSURE ALL TENSORS ARE ON THE SAME DEVICE AS MODEL
-            target_torch_model = target_torch.to(device)  # Explicitly ensure correct device
+            target_torch_model = target_torch.to(device)  
             
-            # Model inference - now both model and input are on same device
+            # Model inference 
             model_out = model(target_torch_model)
             w_i = model_out[:, :, 0]
             theta_i = model_out[:, :, 1]
-            
-            # Ensure w_theta_grid gets tensors on correct device
             w_grid, theta_grid = w_theta_grid(w_i, theta_i, target_torch_model)
             
-            # Rest of reconstruction pipeline
+            # Reconstruction pipeline
             _, phi_recon = inverse_complex_ft(w_grid, theta_grid)
             A_const = torch.ones_like(target_torch_model)
             recon, _ = calculate_complex_ft(A_const, phi_recon)
