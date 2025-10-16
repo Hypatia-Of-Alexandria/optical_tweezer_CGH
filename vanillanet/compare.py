@@ -18,7 +18,6 @@ __all__ = [
 def compare_all_methods(dataset, model, device, num_samples=5, save_path='images/comparison_results.png'):
     """
     Compare Gerchberg-Saxton (standard), Gerchberg-Saxton (weighted), SGD, and Neural Network on the same dataset samples.
-    UPDATED: Uses consistent intensity normalization and proper device handling.
     
     Args:
         dataset: Dataset to test on
@@ -41,10 +40,6 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
     # Ensure model and device are consistent
     model_device = next(model.parameters()).device
     if str(model_device) != str(device):
-        # print(f"⚠️  Device mismatch detected!")
-        # print(f"   Model is on: {model_device}")
-        # print(f"   Requested device: {device}")
-        # print(f"   Moving model to {device}...")
         model = model.to(device)
     
     print(f"Comparing all methods on {num_samples} samples...")
@@ -67,7 +62,7 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
     for i, idx in enumerate(indices):
         print(f"\n--- Sample {i+1} (Index {idx}) ---")
         
-        # Get target sample - ENSURE CONSISTENT DEVICE HANDLING
+        # Get target sample
         target_raw = dataset[idx]  # Raw tensor from dataset
         target = target_raw.squeeze().numpy()  # For numpy operations
         target_torch = target_raw.unsqueeze(0).to(device)  # For neural network - MOVED TO CORRECT DEVICE
@@ -77,7 +72,6 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
         gs_standard_result = gerchberg_saxton_with_metrics(
             target_torch.squeeze(), 
             num_iterations=2000, 
-            convergence_threshold=1e-9,
             device=device, 
             weighted=False
         )
@@ -88,7 +82,6 @@ def compare_all_methods(dataset, model, device, num_samples=5, save_path='images
         gs_weighted_result = gerchberg_saxton_with_metrics(
             target_torch.squeeze(), 
             num_iterations=2000, 
-            convergence_threshold=1e-9,
             device=device, 
             weighted=True
         )

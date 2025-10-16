@@ -42,14 +42,12 @@ class GerchbergSaxtonSolver:
         else:
             self.slm_phase = initial_phase.to(device)
 
-    def iterate(self, num_iterations=1000, convergence_threshold=1e-6, weighted=False, epsilon=1e-10,
-            inefficiency_threshold=0.3, non_uniformity_threshold=0.1, print_values=False):
+    def iterate(self, num_iterations=1000, weighted=False, epsilon=1e-10, print_values=False):
         """
         Perform Gerchberg-Saxton iterations.
         
         Args:
             num_iterations: Maximum number of iterations
-            convergence_threshold: Stop if error change is below this threshold
             weighted: If True, use weighted Gerchberg-Saxton algorithm
             epsilon: Small constant to prevent division by zero
             
@@ -60,19 +58,9 @@ class GerchbergSaxtonSolver:
         errors = []
         inefficiencies = []
         non_uniformities = []
-        
-        prev_inefficiency = float('inf')
-        prev_non_uniformity = float('inf')
 
-        # Quality thresholds for weighted GS
         if weighted:
-            # inefficiency_threshold = 0.3
-            # non_uniformity_threshold = 0.1
             prev_g = torch.ones_like(self.target_amplitude)
-            # if print_values:
-            #     print(f"Weighted GS quality requirements:")
-            #     print(f"  Inefficiency must be < {inefficiency_threshold}")
-            #     print(f"  Non-uniformity must be < {non_uniformity_threshold}")
         
         for i in range(num_iterations):
             # Forward propagation: SLM plane -> Image plane
@@ -129,44 +117,6 @@ class GerchbergSaxtonSolver:
             mse_error = torch.mean((B_image - self.target_amplitude) ** 2).item()
             errors.append(mse_error)
             
-            # # Check for convergence
-            # inefficiency_change = abs(prev_inefficiency - current_inefficiency)
-            # non_uniformity_change = abs(prev_non_uniformity - current_non_uniformity)
-            
-            # # Convergence criteria depend on whether weighted GS is used
-            # if weighted:
-            #     # For weighted GS: require both quality thresholds AND convergence stability
-            #     stability_met = (inefficiency_change < convergence_threshold and 
-            #                 non_uniformity_change < convergence_threshold and 
-            #                 i > 10)  
-                
-            #     if stability_met:
-            #         if print_values:
-            #             print(f"Weighted GS converged after {i+1} iterations")
-            #             print(f"Stability achieved:")
-            #             print(f"  Inefficiency change: {inefficiency_change:.8f} < {convergence_threshold}")
-            #             print(f"  Non-uniformity change: {non_uniformity_change:.8f} < {convergence_threshold}")
-            #         break
-            #     elif i % 50 == 0:
-            #         if print_values:
-            #             print(f"Iteration {i+1}: Waiting for stability...")
-            #             print(f"  Inefficiency change: {inefficiency_change:.8f} (need < {convergence_threshold})")
-            #             print(f"  Non-uniformity change: {non_uniformity_change:.8f} (need < {convergence_threshold})")
-
-                    
-            # else: # For standard GS: use original convergence criteria
-            #     if (inefficiency_change < convergence_threshold and 
-            #         non_uniformity_change < convergence_threshold and 
-            #         i > 10):
-            #         if print_values:
-            #             print(f"Standard GS converged after {i+1} iterations")
-            #             print(f"Final inefficiency: {current_inefficiency:.6f} (change: {inefficiency_change:.8f})")
-            #             print(f"Final non-uniformity: {current_non_uniformity:.6f} (change: {non_uniformity_change:.8f})")
-            #         break
-                
-            prev_inefficiency = current_inefficiency
-            prev_non_uniformity = current_non_uniformity
-            
             if print_values:
                 if i % 10 == 0:
                     print(f"Iteration {i+1}/{num_iterations}")
@@ -192,7 +142,7 @@ class GerchbergSaxtonSolver:
         return B_image
 
 
-def gerchberg_saxton(target_image, num_iterations=1000, convergence_threshold=1e-6, device='cpu', weighted=False, epsilon=1e-10, print_values=False):
+def gerchberg_saxton(target_image, num_iterations=1000, device='cpu', weighted=False, epsilon=1e-10, print_values=False):
     """
     Convenience function to run Gerchberg-Saxton algorithm.
     
@@ -213,7 +163,7 @@ def gerchberg_saxton(target_image, num_iterations=1000, convergence_threshold=1e
     solver = GerchbergSaxtonSolver(target_amplitude, device=device)
     
     # Run iterations
-    slm_phase, errors = solver.iterate(num_iterations=num_iterations, convergence_threshold=convergence_threshold, weighted=weighted, epsilon=epsilon, print_values=print_values)
+    slm_phase, errors = solver.iterate(num_iterations=num_iterations, weighted=weighted, epsilon=epsilon, print_values=print_values)
     
     # Get final reconstruction amplitude
     reconstructed = solver.get_reconstructed_image()
@@ -221,7 +171,7 @@ def gerchberg_saxton(target_image, num_iterations=1000, convergence_threshold=1e
     return slm_phase, reconstructed, errors
 
 
-def gerchberg_saxton_with_metrics(target_image, num_iterations=1000, device='cpu', convergence_threshold=1e-6, weighted=False, epsilon=1e-10, print_values=False):
+def gerchberg_saxton_with_metrics(target_image, num_iterations=1000, device='cpu', weighted=False, epsilon=1e-10, print_values=False):
     """
     Enhanced Gerchberg-Saxton algorithm that returns detailed metrics.
     
@@ -243,7 +193,6 @@ def gerchberg_saxton_with_metrics(target_image, num_iterations=1000, device='cpu
     # Time the GS iterations
     start_time = perf_counter()
     slm_phase, metric_histories = solver.iterate(num_iterations=num_iterations, 
-                                            convergence_threshold=convergence_threshold, 
                                             weighted=weighted, 
                                             epsilon=epsilon,
                                             print_values=print_values)
@@ -376,7 +325,7 @@ def visualize_gs_results_multirow(gs_results_list, save_path='images/gs_results_
     plt.show()
 
 
-def test_gs_multiple_samples(dataset, num_samples=5, device=None, debug=False, weighted=False, convergence_threshold=1e-6, epsilon=1e-10, num_iterations=1000, print_values=False, print_metrics = True, print_summary = True):
+def test_gs_multiple_samples(dataset, num_samples=5, device=None, debug=False, weighted=False, epsilon=1e-10, num_iterations=1000, print_values=False, print_metrics = True, print_summary = True, display_images = True):
     """
     Test GS algorithm on multiple samples from dataset with multi-row visualization.
     
@@ -404,7 +353,7 @@ def test_gs_multiple_samples(dataset, num_samples=5, device=None, debug=False, w
         target = dataset[i]  # Shape: (1, 64, 64)
         
         # Run GS algorithm with metrics
-        results = gerchberg_saxton_with_metrics(target, num_iterations=num_iterations, device=device, weighted=weighted, convergence_threshold=convergence_threshold, epsilon=epsilon, print_values=print_values)
+        results = gerchberg_saxton_with_metrics(target, num_iterations=num_iterations, device=device, weighted=weighted, epsilon=epsilon, print_values=print_values)
         all_results.append(results)
         
         # Print progress
@@ -415,8 +364,9 @@ def test_gs_multiple_samples(dataset, num_samples=5, device=None, debug=False, w
             print(f"Intensity error: {metrics['intensity_error']:.4f}")
     
     # Create the multi-row visualization
-    print(f"\nCreating {num_samples}-row visualization...")
-    visualize_gs_results_multirow(all_results, f'images/gs_results_{num_samples}rowWeighted{weighted}.png', debug=debug, weighted=weighted)
+    if display_images:
+        print(f"\nCreating {num_samples}-row visualization...")
+        visualize_gs_results_multirow(all_results, f'images/gs_results_{num_samples}rowWeighted{weighted}.png', debug=debug, weighted=weighted)
     
     # Print summary table
     if print_summary:
@@ -436,7 +386,7 @@ def test_gs_multiple_samples(dataset, num_samples=5, device=None, debug=False, w
     return all_results
 
 
-def test_gerchberg_saxton(debug=False, weighted=False, epsilon=1e-10, convergence_threshold=1e-6, num_iterations=1000, num_samples=5, print_values=False):
+def test_gerchberg_saxton(debug=False, weighted=False, epsilon=1e-10, num_iterations=1000, num_samples=5, print_values=False, print_metrics = True, print_summary = True):
     """Test the Gerchberg-Saxton implementation with enhanced visualization
         Args:
             debug: If True, shows detailed debug information
@@ -451,6 +401,15 @@ def test_gerchberg_saxton(debug=False, weighted=False, epsilon=1e-10, convergenc
     
     # Test multiple samples with the new visualization
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    all_results = test_gs_multiple_samples(dataset, num_samples=num_samples, device=device, debug=debug, weighted=weighted, epsilon=epsilon, convergence_threshold=convergence_threshold, num_iterations=num_iterations, print_values=print_values)
-    
+    all_results = test_gs_multiple_samples(dataset, 
+                                    num_samples=num_samples, 
+                                    device=device, 
+                                    debug=debug,
+                                    weighted=weighted, 
+                                    epsilon=epsilon, 
+                                    num_iterations=num_iterations, 
+                                    print_values=print_values, 
+                                    print_metrics=print_metrics, 
+                                    print_summary=print_summary)
+
     return all_results
