@@ -140,10 +140,6 @@ nn_results = model(target_pattern)
 - **Qu Gao** 
 - **Wojciech Adamczyk** (supervisor for project)
 
-## Future Work
-- [ ] Implement more sophisticated neural network architectures
-- [ ] Add support for continuous phase patterns
-- [ ] Integration with physical SLM hardware
 
 ---
 *This project was developed as part of my semester project at ETH Zurich in the Prof Home's Trapped Ion Quantum Information Group, on the topic of neural networks for computer generated holography (CGH) of optical tweezers in trapped-ion quantum computing experiments.*
